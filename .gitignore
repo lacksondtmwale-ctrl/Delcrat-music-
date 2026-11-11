@@ -1,0 +1,22 @@
+.env
+node_modules/
+
+# Private database and uploaded music
+/data/*.db
+/data/*.db-*
+/public/music/*
+!/public/music/.gitkeep
+
+# Private and temporary files
+/cookies.txt
+/data/
+/backup/
+*.backup-*
+/admin-backup.html
+/admin-before-*.html
+/index-backup.js
+/index-before-*.js
+
+# Old website backups
+/public/index-backup.html
+/public/index-before-library.html

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delcrat Admin Login</title>
+<style>
+body{background:#101010;color:white;font-family:Arial;padding:25px}
+.box{max-width:400px;margin:70px auto;background:#222;padding:25px;border-radius:15px}
+h1{color:#eeb400}
+input,button{width:100%;padding:14px;margin:10px 0;box-sizing:border-box}
+input{background:#111;color:white;border:1px solid #555;border-radius:6px}
+button{background:#eeb400;border:0;border-radius:6px;font-weight:bold}
+#message{color:#ff7777}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>DELCRAT MUSIC</h1>
+<h2>Private Admin Login</h2>
+<form id="login">
+<input name="username" placeholder="Admin username" required>
+<input name="password" type="password" placeholder="Admin password" required>
+<button type="submit">LOG IN</button>
+</form>
+<p id="message"></p>
+</div>
+<script>
+document.getElementById('login').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const form=new FormData(e.target);
+ const response=await fetch('/api/admin/login',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({
+   username:form.get('username'),
+   password:form.get('password')
+  })
+ });
+ const data=await response.json();
+ if(response.ok){location.href='/admin';}
+ else{document.getElementById('message').textContent=data.message;}
+});
+</script>
+</body>
+</html>

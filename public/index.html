@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delcrat Music</title>
+<style>
+*{box-sizing:border-box;scroll-behavior:smooth}
+body{margin:0;background:#101010;color:white;font-family:Arial,sans-serif}
+header{background:#191919;padding:15px}
+header h1{color:#eeb400;margin:8px 0}
+nav{display:flex;gap:20px;overflow-x:auto;padding:15px;background:#222;position:sticky;top:0}
+nav a{color:#eeb400;text-decoration:none;font-weight:bold;white-space:nowrap}
+main{padding:20px;max-width:850px;margin:auto}
+.banner{width:100%;border-radius:15px}
+h2{color:#eeb400;margin-top:35px}
+.song{background:#222;padding:18px;border-radius:12px;margin:15px 0}
+.song audio,.song video{width:100%;max-width:100%;margin-top:12px;border-radius:10px}
+button{background:#eeb400;border:0;padding:12px 20px;border-radius:8px;font-weight:bold}
+input{padding:12px;width:100%;margin:8px 0}
+section{padding:15px 0;border-bottom:1px solid #333}
+.muted{color:#aaa}
+footer{text-align:center;padding:30px;color:#aaa}
+</style>
+</head>
+<body>
+
+<header>
+<h1>DELCRAT MUSIC</h1>
+<p>Your Music. Your Sound. Your World.</p>
+</header>
+
+<nav>
+<a href="#home">Home</a>
+<a href="#music">Music</a>
+<a href="#artist">Artist</a>
+<a href="/admin/login">Admin Login</a>
+<a href="#info">Site Info</a>
+</nav>
+
+<main>
+
+<section id="home">
+<img class="banner" src="/images/delcrat-banner.png" alt="Delcrat Music">
+<h2>Welcome to Delcrat Music</h2>
+<p>Discover and enjoy music from Delcrat.</p>
+<h3>Latest Releases</h3>
+<p>Listen to the latest music and enjoy the sound.</p>
+</section>
+
+<section id="music">
+<h2>Our Music</h2>
+
+<div class="song">
+<h3>Secret Twinkle</h3>
+<p class="muted">Artist: Delcrat</p>
+<audio controls preload="metadata">
+<source src="/music/DELCRAT-Secret%20Twinkle.mp3" type="audio/mpeg">
+</audio>
+</div>
+
+<div class="song">
+<h3>Remember Me</h3>
+<p class="muted">Artist: Delcrat ft J Swagg</p>
+<audio controls preload="metadata">
+<source src="/music/delcrat%20ft%20%20jswagg%20remember%20me.mp3" type="audio/mpeg">
+</audio>
+</div>
+
+<h2>Latest Uploads</h2>
+<div id="uploadedMusic">
+<p class="muted">Loading music...</p>
+</div>
+</section>
+
+<section id="artist">
+<h2>Artist Profile</h2>
+<img src="/images/delcrat-banner.png" alt="Delcrat" style="width:180px;border-radius:15px">
+<h3>DELCRAT</h3>
+<p>Independent music artist creating Afrobeat, love songs and more.</p>
+</section>
+
+<section id="admin">
+<h2>Administrator</h2>
+<p>Secure management of music uploads and releases.</p>
+<p><a href="/admin/login" style="color:#eeb400;font-weight:bold">ADMIN LOGIN</a></p>
+</section>
+
+<section id="info">
+<h2>About Delcrat Music</h2>
+<p>Delcrat Music is the home of Delcrat's music.</p>
+<p>Your Music. Your Sound. Your World.</p>
+<p>Website: Delcrat Music</p>
+</section>
+
+</main>
+
+<footer>
+© 2026 Delcrat Music. All Rights Reserved.
+</footer>
+
+
+<script>
+async function loadUploadedMusic(){
+ const area=document.getElementById('uploadedMusic');
+ try{
+  const response=await fetch('/api/songs');
+  if(!response.ok) throw new Error('Could not load uploads');
+  const songs=await response.json();
+  area.replaceChildren();
+
+  if(!Array.isArray(songs) || songs.length===0){
+   area.textContent='No new uploads yet.';
+   return;
+  }
+
+  songs.forEach(song=>{
+   const item=document.createElement('div');
+   item.className='song';
+
+   const title=document.createElement('h3');
+   title.textContent=song.title || 'Untitled';
+   item.appendChild(title);
+
+   const artist=document.createElement('p');
+   artist.className='muted';
+   artist.textContent='Artist: '+(song.artist || 'Unknown');
+   item.appendChild(artist);
+
+   if(song.cover){
+    const cover=document.createElement('img');
+    cover.src=song.cover;
+    cover.alt='Cover';
+    cover.loading='lazy';
+    cover.style.width='100%';
+    cover.style.maxWidth='300px';
+    cover.style.borderRadius='10px';
+    item.appendChild(cover);
+   }
+
+   const isVideo=song.mediaType==='video' ||
+    /\.(mp4|mov|mkv|webm|avi)$/i.test(song.audio || '');
+
+   const player=document.createElement(isVideo?'video':'audio');
+   player.controls=true;
+   player.preload='none';
+   player.src=song.audio;
+   if(isVideo) player.playsInline=true;
+   item.appendChild(player);
+
+   area.appendChild(item);
+  });
+ }catch(error){
+  area.textContent='New uploads are temporarily unavailable.';
+ }
+}
+loadUploadedMusic();
+</script>
+\n</body>
+</html>
