@@ -20,3 +20,6 @@ node_modules/
 # Old website backups
 /public/index-backup.html
 /public/index-before-library.html
+
+!/public/music/DELCRAT-Secret Twinkle.mp3
+!/public/music/delcrat ft  jswagg remember me.mp3
